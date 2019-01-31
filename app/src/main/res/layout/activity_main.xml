@@ -10,10 +10,12 @@
         android:id="@+id/txtSpeechInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:textColor="@color/white"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="122dp"
+        android:text="Tap on the button to continue"
+        android:textColor="@android:color/black"
         android:textSize="26dp"
         android:textStyle="normal" />
 

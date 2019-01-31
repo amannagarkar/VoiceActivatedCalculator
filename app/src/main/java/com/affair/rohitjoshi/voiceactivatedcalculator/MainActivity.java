@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
@@ -22,11 +23,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
 
         // hide the action bar
-        //getActionBar().hide();
+      //  getActionBar().hide();
 
         btnSpeak.setOnClickListener(new View.OnClickListener() {
 
@@ -76,7 +78,101 @@ public class MainActivity extends AppCompatActivity {
 
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    txtSpeechInput.setText(result.get(0));
+
+                    String string=result.get(0);
+                    char c = 'a';
+                    for(int i=0; i < string.length() ; i++)
+                    {
+                        char check = string.charAt(i);
+
+                        if( check == '+' )
+                        {
+                            c='+';
+                            break;
+                        }
+
+                        else if ( check == '-')
+                        {
+                            c = '-';
+                            break;
+                        }
+
+
+                        else if ( check == 'x')
+                        {
+                            c = 'x';
+                            break;
+                        }
+
+
+                        else if ( check == '/')
+                        {
+                            c = '/';
+                            break;
+                        }
+
+                    }
+
+
+                    if(c =='+') {
+                        String[] expression = string.split("\\+");
+                        Log.d("exp", expression[0]);
+                        Log.d("exp", expression[1]);
+                        int x = 0, y = 0, z = 0;
+                        x = Integer.parseInt(expression[0].trim());
+                        y = Integer.parseInt(expression[1].trim());
+                        z = x + y;
+                        string = string + " = " + String.valueOf(z);
+
+                        txtSpeechInput.setText(string);
+                    }
+
+                    if(c =='-') {
+                        String[] expression = string.split("\\-");
+                        Log.d("exp", expression[0]);
+                        Log.d("exp", expression[1]);
+                        int x = 0, y = 0, z = 0;
+                        x = Integer.parseInt(expression[0].trim());
+                        y = Integer.parseInt(expression[1].trim());
+                        z = x - y;
+                        string = string + " = " + String.valueOf(z);
+
+                        txtSpeechInput.setText(string);
+                    }
+
+                    if(c =='x') {
+                        String[] expression = string.split("x");
+                        Log.d("exp", expression[0]);
+                        Log.d("exp", expression[1]);
+                        int x = 0, y = 0, z = 0;
+                        x = Integer.parseInt(expression[0].trim());
+                        y = Integer.parseInt(expression[1].trim());
+                        z = x * y;
+                        string = string + " = " + String.valueOf(z);
+
+                        txtSpeechInput.setText(string);
+                    }
+
+                    if(c =='/') {
+                        String[] expression = string.split("\\/");
+                        Log.d("exp", expression[0]);
+                        Log.d("exp", expression[1]);
+                        int x = 0, y = 0, z = 0;
+                        x = Integer.parseInt(expression[0].trim());
+                        y = Integer.parseInt(expression[1].trim());
+                        z = x / y;
+                        string = string + " = " + String.valueOf(z);
+
+                        txtSpeechInput.setText(string);
+                    }
+
+                    if (c=='a')
+                    {
+                        string = "Please try again";
+
+                        txtSpeechInput.setText(string);
+
+                    }
                 }
                 break;
             }
@@ -92,8 +188,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
-
-
 
 
