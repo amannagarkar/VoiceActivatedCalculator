@@ -3,6 +3,8 @@ package com.affair.rohitjoshi.voiceactivatedcalculator;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.speech.*;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,20 +17,50 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Locale;
 
+
 public class MainActivity extends AppCompatActivity {
-    private TextView txtSpeechInput;
-    private ImageButton btnSpeak;
+    private TextView txtSpeechInput;    //OUTPUT STRING DISPLAY
+    private TextToSpeech voiceout;      //VOICE OUTPUT
+    private ImageButton btnSpeak;       //MICROPHONE BUTTON
     private final int REQ_CODE_SPEECH_INPUT = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        /* Code for Text to Speech Engine initialization */
+        voiceout = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status == voiceout.SUCCESS)
+                {
+                    int result =   voiceout.setLanguage(Locale.ENGLISH);                                //SETTING LANGUAGE TO ENGLISH
+                    if(result == voiceout.LANG_MISSING_DATA || result == voiceout.LANG_NOT_SUPPORTED)
+                    {
+                        Log.e( "VOICE OUTPUT",  "Language not Supported");
+                    }
+                    else
+                    {
+
+                    }
+
+                }
+
+                else
+                {
+                    Log.e( "VOICE OUTPUT",  "Initialization failure");
+                }
+
+            }
+        });
+
+
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
 
         // hide the action bar
-      //  getActionBar().hide();
+        // getActionBar().hide();
 
         btnSpeak.setOnClickListener(new View.OnClickListener() {
 
@@ -40,9 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         final Intent mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-
-
-
 
     }
 
@@ -80,7 +109,9 @@ public class MainActivity extends AppCompatActivity {
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
                     String string=result.get(0);
+
                     char c = 'a';
+
                     for(int i=0; i < string.length() ; i++)
                     {
                         char check = string.charAt(i);
@@ -98,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
 
-                        else if ( check == 'x')
+                        else if ( check == 'x' || check == '*' )
                         {
                             c = 'x';
                             break;
@@ -125,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
                         string = string + " = " + String.valueOf(z);
 
                         txtSpeechInput.setText(string);
+                        speak();
                     }
 
                     if(c =='-') {
@@ -138,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                         string = string + " = " + String.valueOf(z);
 
                         txtSpeechInput.setText(string);
+                        speak();
                     }
 
                     if(c =='x') {
@@ -151,19 +184,30 @@ public class MainActivity extends AppCompatActivity {
                         string = string + " = " + String.valueOf(z);
 
                         txtSpeechInput.setText(string);
+                        speak();
                     }
 
                     if(c =='/') {
                         String[] expression = string.split("\\/");
                         Log.d("exp", expression[0]);
                         Log.d("exp", expression[1]);
-                        int x = 0, y = 0, z = 0;
+                        float x = 0, y = 0, z = 0;
+                        int a;
                         x = Integer.parseInt(expression[0].trim());
                         y = Integer.parseInt(expression[1].trim());
-                        z = x / y;
-                        string = string + " = " + String.valueOf(z);
+                        try {
 
+                            z = x / y;
+                            string = string + " = " + String.valueOf(z);
+                        }
+
+                        catch (ArithmeticException dbz)
+                        {
+                            string = "The denominator can't be zero.";
+                        }
                         txtSpeechInput.setText(string);
+                        speak();
+
                     }
 
                     if (c=='a')
@@ -187,6 +231,23 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void speak()
+    {
+        String text = txtSpeechInput.getText().toString();
+        voiceout.setPitch(50);
+        voiceout.setSpeechRate(50);
+
+        voiceout.speak(text,TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        if(voiceout != null)
+        {
+            voiceout.stop();
+            voiceout.shutdown();
+        }
+        super.onDestroy();
+    }
 }
-
-
