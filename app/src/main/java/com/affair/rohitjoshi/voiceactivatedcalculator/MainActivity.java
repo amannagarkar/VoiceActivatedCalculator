@@ -215,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
                         string = "Please try again";
 
                         txtSpeechInput.setText(string);
+                        speak();
 
                     }
                 }
@@ -234,8 +235,8 @@ public class MainActivity extends AppCompatActivity {
     private void speak()
     {
         String text = txtSpeechInput.getText().toString();
-        voiceout.setPitch(50);
-        voiceout.setSpeechRate(50);
+        voiceout.setPitch(1/10);
+        voiceout.setSpeechRate(1/2);
 
         voiceout.speak(text,TextToSpeech.QUEUE_FLUSH, null);
     }
