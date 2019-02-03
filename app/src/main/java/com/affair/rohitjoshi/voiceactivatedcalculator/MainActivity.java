@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        listoutput = (ListView) findViewById(R.id.list_output);
+        //listoutput = (ListView) findViewById(R.id.list_output);
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
 
