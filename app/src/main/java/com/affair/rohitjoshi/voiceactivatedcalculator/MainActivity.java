@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,8 @@ import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private ListView listoutput;
     private TextView txtSpeechInput;    //OUTPUT STRING DISPLAY
     private TextToSpeech voiceout;      //VOICE OUTPUT
     private ImageButton btnSpeak;       //MICROPHONE BUTTON
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        listoutput = (ListView) findViewById(R.id.list_output);
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
 
