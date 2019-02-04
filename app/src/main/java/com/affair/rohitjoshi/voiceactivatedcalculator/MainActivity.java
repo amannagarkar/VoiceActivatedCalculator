@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +24,12 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private ListView listoutput;
-    private TextView txtSpeechInput;    //OUTPUT STRING DISPLAY
-    private TextToSpeech voiceout;      //VOICE OUTPUT
-    private ImageButton btnSpeak;       //MICROPHONE BUTTON
+    private TextView txtSpeechInput;                                  //OUTPUT STRING DISPLAY
+    private TextToSpeech voiceout;                                    //VOICE OUTPUT
+    private ImageButton btnSpeak;                                     //MICROPHONE BUTTON
+    ArrayList <String> output = new ArrayList<>();                    //Output list
+    String string;                                                    //OUTPUT Store
+
     private final int REQ_CODE_SPEECH_INPUT = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +63,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //listoutput = (ListView) findViewById(R.id.list_output);
+        listoutput = (ListView) findViewById(R.id.outputlist);
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
 
         // hide the action bar
         // getActionBar().hide();
+
 
         btnSpeak.setOnClickListener(new View.OnClickListener() {
 
@@ -111,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                    String string=result.get(0);
+
+                    string = result.get(0);
 
                     char c = 'a';
 
@@ -152,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                         String[] expression = string.split("\\+");
                         Log.d("exp", expression[0]);
                         Log.d("exp", expression[1]);
-                        int x = 0, y = 0, z = 0;
+                        long x = 0, y = 0, z = 0;
                         x = Integer.parseInt(expression[0].trim());
                         y = Integer.parseInt(expression[1].trim());
                         z = x + y;
@@ -166,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                         String[] expression = string.split("\\-");
                         Log.d("exp", expression[0]);
                         Log.d("exp", expression[1]);
-                        int x = 0, y = 0, z = 0;
+                        long x = 0, y = 0, z = 0;
                         x = Integer.parseInt(expression[0].trim());
                         y = Integer.parseInt(expression[1].trim());
                         z = x - y;
@@ -180,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                         String[] expression = string.split("x");
                         Log.d("exp", expression[0]);
                         Log.d("exp", expression[1]);
-                        int x = 0, y = 0, z = 0;
+                        long x = 0, y = 0, z = 0;
                         x = Integer.parseInt(expression[0].trim());
                         y = Integer.parseInt(expression[1].trim());
                         z = x * y;
@@ -194,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                         String[] expression = string.split("\\/");
                         Log.d("exp", expression[0]);
                         Log.d("exp", expression[1]);
-                        float x = 0, y = 0, z = 0;
+                        long x = 0, y = 0, z = 0;
                         int a;
                         x = Integer.parseInt(expression[0].trim());
                         y = Integer.parseInt(expression[1].trim());
@@ -225,7 +232,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
 
-        }
+        }                                                               //switch
+
+        output.add(0,string);
+
+        ArrayAdapter listAdapter = new ArrayAdapter(this,R.layout.itemlist,R.id.list_text,output);
+
+        listoutput.setAdapter(listAdapter);
+
     }
 
     @Override

@@ -12,12 +12,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="122dp"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="335dp"
         android:text="@string/tap_on_the_button_to_continue"
-        android:textColor="@android:color/black"
-        android:textSize="26sp"
-        android:textStyle="normal" />
+        android:textColor="#303F9F"
+        android:textSize="24sp"
+        android:textStyle="normal"
+        tools:textAlignment="center" />
 
     <LinearLayout
         android:layout_width="193dp"
@@ -46,5 +49,10 @@
             android:background= "@null"
             android:textStyle="normal" />
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/outputlist"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
 
 </RelativeLayout>
